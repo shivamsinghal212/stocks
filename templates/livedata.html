@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block  content %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<body>
+<table id="example" class="display" cellspacing="0" style="width:80%">
+ <thead>
+  <tr>
+      <th>Date/Time</th>
+      <th>Open</th>
+      <th>Close</th>
+      <th>Low</th>
+      <th>High</th>
+      <th>Volume</th>
+
+  </tr>
+</thead>
+<tbody>
+{% for i in data.time %}
+    {% for j in data.time %}
+      <tr>
+
+          <td>{{ i }}</td>
+          {% endfor %}
+          <td>{{ j }}</td>
+{% endfor %}
+          <td>{{ stock.close }}</td>
+          <td>{{ stock.low }}</td>
+          <td>{{ stock.high }}</td>
+          <td>{{ stock.volume }}</td>
+
+      </tr>
+</tbody>
+</table>
+<script
+  src="https://code.jquery.com/jquery-1.12.4.js">
+</script>
+<script
+  src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js">
+</script>
+<script
+  src="{% static 'js/livedata.js' %}">
+</script>
+</body>
+{% endblock %}

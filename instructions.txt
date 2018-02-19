@@ -1,0 +1,6 @@
+1. intall the requirements in the virtualenv
+2. open the project using pycharm or atom. 
+3. makemigartions and migrate
+4. modify the import.py accordingly to load csv into database
+5. runserver.
+
