@@ -3,9 +3,34 @@
 
 
 {% block  content %}
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
-<body>
-<table id="example" class="display" cellspacing="0" style="width:80%">
+
+    <div class="jumbotron">
+<form action="{% url 'getlivedata' %}" method="post">{% csrf_token %}
+<div class="row">
+<div class="col">
+  <div class="chosen-wrapper" data-js="custom-scroll">
+  <select class="chosen-select" data-placeholder="Stock Symbol" name="get_symbol">
+      {% for ticker in ticker_list %}
+    <option value="{{ ticker }}">{{ ticker }}</option>
+      {% endfor %}
+  </select>
+   </div>
+</div>
+<div class="col">
+<div class="chosen-wrapper" data-js="custom-scroll">
+ <select class="chosen-select" data-placeholder="Stock Symbol" name="get_function">
+      {% for function in function_list %}
+    <option value="{{ function }}">{{ function }}</option>
+      {% endfor %}
+ </select>
+</div>
+</div>
+</div>
+    <button type="submit" name="Livedata" class="btn btn-outline-dark">Submit</button>
+</form>
+</div>
+    <div class="container">
+        <table id="example" class="display" cellspacing="0" style="width:80%">
  <thead>
   <tr>
       <th>Date/Time</th>
@@ -18,30 +43,25 @@
   </tr>
 </thead>
 <tbody>
-{% for i in data.time %}
-    {% for j in data.time %}
+      {% for stock in data %}
       <tr>
-
-          <td>{{ i }}</td>
-          {% endfor %}
-          <td>{{ j }}</td>
-{% endfor %}
+          <td>{{ stock.Time }}</td>
+          <td>{{ stock.open }}</td>
           <td>{{ stock.close }}</td>
           <td>{{ stock.low }}</td>
           <td>{{ stock.high }}</td>
           <td>{{ stock.volume }}</td>
-
+      {% endfor %}
       </tr>
 </tbody>
 </table>
-<script
-  src="https://code.jquery.com/jquery-1.12.4.js">
-</script>
-<script
-  src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js">
-</script>
-<script
-  src="{% static 'js/livedata.js' %}">
-</script>
-</body>
+</div>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script type="text/javascript" src="{% static 'js/table.js' %}"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.js"></script>
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+
 {% endblock %}

@@ -1,85 +1,9 @@
 {% extends 'base.html' %}
-{% load static %}
 {% block content %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
-    <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <body>
+
 <h1><span>Stock control : Live and Historical data</span></h1>
-<div class="container">
-<div class="row">
-<div class="col">
-<div class="jumbotron">
-<h3 align="center">Historical Data</h3>
-<form action="/gethistdata/" method="post">{% csrf_token %}
-  <div class="chosen-wrapper" data-js="custom-scroll">
-  <select class="chosen-select" data-placeholder="Stock Symbol" name="get_symbol">
-      {% for ticker in ticker_list %}
-    <option value="{{ ticker }}">{{ ticker }}</option>
-      {% endfor %}
-    </select>
-  </div>
-<div class="text-center">
-  From:<input type="text" id="start" name="startdate" />
-  To:<input type="text" id="end" name="enddate" />
-</div>
-<br>
-<div class="text-center">
-    <button type="submit" name="Histdata" class="btn btn-outline-dark">Submit</button>
-</div>
-</form>
-</div>
-</div>
-
-  <div class="col">
-    <div class="jumbotron">
-    <h3 align="center">Realtime Data</h3>
-<form action="/getlivedata/" method="post">{% csrf_token %}
-  <div class="chosen-wrapper" data-js="custom-scroll">
-  <select class="chosen-select" data-placeholder="Stock Symbol" name="get_symbol">
-      {% for ticker in ticker_list %}
-    <option value="{{ ticker }}">{{ ticker }}</option>
-      {% endfor %}
-    </select>
-</div>
-<div class="text-center">
-<button type="submit" name="Livedata" class="btn btn-outline-dark">Submit</button>
-    </div>
-</form>
-</div>
-</div>
-</div>
-</div>
 
 
-    <script
-  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-</script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-   <script
-  src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.js">
-</script>
-    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
-    <script src="{% static 'js/glDatePicker.min.js' %}"></script>
-        <script type="text/javascript">
-        $(window).load(function()
-        {
-            $('input').glDatePicker({
-    onClick: function(target, cell, date, data) {
-        target.val(date.getFullYear() + '-' +
-                    date.getMonth() + '-' +
-                    date.getDate());
 
-        if(data != null) {
-            alert(data.message + '\n' + date);
-        }
-    }
-});
-        });
-    </script>
-    <script type="text/javascript">
-        $('#example3').glDatePicker(
-);
-    </script>
-    </body>
+
 {% endblock content %}

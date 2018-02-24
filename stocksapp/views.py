@@ -15,9 +15,16 @@ def get_ticker_list():
     return ticker_list
 
 
+def get_function_list():
+    function_list = ['TIME_SERIES_DAILY','TIME_SERIES_WEEKLY','TIME_SERIES_MONTHLY']
+    return function_list
+
+
+
+
 def home(request):
     context = {
-        'ticker_list': get_ticker_list()
+
     }
     return render(request,'index.html', context)
 
@@ -25,42 +32,30 @@ def home(request):
 def get_data(request):
     if request.method == 'POST' and 'Livedata' in request.POST:
         symbol = str(request.POST.get('get_symbol'))
+        functions = str(request.POST.get('get_function'))
         key = 'LSFIEW3MWL734JUH'
-        url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+symbol+'&interval=1min&apikey='+key
-        data = requests.get(url).json()
-        l = list(data.values())[1]
-        time = []
-        values = []
-        for k, v in l.items():
-            time.append(k)
-            values.append(v)
-        open = []
-        high = []
-        low = []
-        close = []
-        volume = []
-        d = {'time': '', 'open': '', 'high': '', 'low': '', 'close': '', 'volume': ''}
-        for i in values:
-            for k, v in i.items():
-                if k == '1. open':
-                    open.append(v)
-                elif k == '2. high':
-                    open.append(v)
-                elif k == '3. low':
-                    open.append(v)
-                elif k == '4. close':
-                    open.append(v)
-                elif k == '5. volume':
-                    open.append(v)
-        d['time'] = time
-        d['open'] = open
-        d['high'] = high
-        d['low'] = low
-        d['close'] = close
-        d['volume'] = volume
+        url = 'https://www.alphavantage.co/query?function='+functions+'&symbol='+symbol+'&apikey='+key
+        if functions == 'TIME_SERIES_DAILY':
+            var = 'Time Series (Daily)'
+        elif functions == 'TIME_SERIES_WEEKLY':
+            var = 'Weekly Time Series'
+        else:
+            var = 'Monthly Time Series'
+        data = requests.get(url).json()[str(var)]
+        transformed = [(v.update({'Time': k}) or v) for (k, v) in data.items()]
+        transformed_list = []
+        for x in transformed:
+            x['open'] = x.pop('1. open')
+            x['high'] = x.pop('2. high')
+            x['low'] = x.pop('3. low')
+            x['close'] = x.pop('4. close')
+            x['volume'] = x.pop('5. volume')
+            transformed_list.append(x)
 
         context = {
-            'data': d,
+            'ticker_list': get_ticker_list(),
+            'function_list': get_function_list(),
+            'data': transformed_list,
         }
         return render(request,"livedata.html",context)
     elif request.method == 'POST' and 'Histdata' in request.POST:
@@ -72,6 +67,12 @@ def get_data(request):
             'data': data
         }
         return render(request,"histdata.html",context)
+    else:
+        context = {
+            'ticker_list': get_ticker_list(),
+            'function_list': get_function_list(),
+        }
+        return render(request, "livedata.html", context)
 
 
 
