@@ -4,7 +4,7 @@
 
 {% block  content %}
     <div class="jumbotron">
-<form action="{% url 'getlivedata' %}" method="post">{% csrf_token %}
+<form action="{% url 'getadjlivedata' %}" method="post">{% csrf_token %}
     <div class="row">
         <div class="col">
             <select class="ui search selection dropdown" id="search-select" name="get_symbol">
@@ -36,9 +36,11 @@
       <th>Date/Time</th>
       <th>Open</th>
       <th>Close</th>
+      <th>Adj. Close</th>
       <th>Low</th>
       <th>High</th>
       <th>Volume</th>
+      <th>Dividend amount</th>
 
   </tr>
 </thead>
@@ -48,9 +50,11 @@
           <td>{{ stock.Time }}</td>
           <td>{{ stock.open }}</td>
           <td>{{ stock.close }}</td>
+          <td>{{ stock.adjusted_close }}</td>
           <td>{{ stock.low }}</td>
           <td>{{ stock.high }}</td>
           <td>{{ stock.volume }}</td>
+          <td>{{ stock.dividend_amount }}</td>
       {% endfor %}
       </tr>
 </tbody>
@@ -62,7 +66,7 @@
                 zoomType: 'x'
             },
             title: {
-                text: '{{ symbol }}:Close'
+                text: '{{ symbol }} :Adj. Close'
             },
             subtitle: {
                 text: document.ontouchstart === undefined ?
@@ -73,7 +77,7 @@
             },
             yAxis: {
                 title: {
-                    text: 'Close'
+                    text: 'Adj. Close'
                 }
             },
             legend: {
@@ -111,7 +115,7 @@
                 name: 'Close',
                 data: [
                     {% for var in data %}
-                [Date.parse("{{ var.Time}}","y-m-d"), parseFloat({{ var.close }}) ],
+                [Date.parse("{{ var.Time}}","y-m-d"), parseFloat({{ var.adjusted_close }}) ],
                     {% endfor %}
         ]
             }]
