@@ -1,4 +1,4 @@
 # stocks
 A web application to view historical and live data for the stocks.
 
-![alt tag](http://https://ibb.co/hVTtoH "Prototype 1")
+![alt tag](https://preview.ibb.co/eezzTH/proto1.png "Prototype 1")
