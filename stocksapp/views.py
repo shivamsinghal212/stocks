@@ -25,6 +25,10 @@ def get_function_list_for_adj_live_data():
     return function_list
 
 
+def get_interval_list_for_intra_live_data():
+    interval_list = ['1min', '5min', '15min', '30min', '60min']
+    return interval_list
+
 
 
 def home(request):
@@ -32,6 +36,49 @@ def home(request):
 
     }
     return render(request,'index.html', context)
+
+
+def get_intra_day_data(request):
+    if request.method == 'POST' and 'Livedata' in request.POST:
+        symbol = str(request.POST.get('get_symbol'))
+        interval = str(request.POST.get('get_interval'))
+        key = 'LSFIEW3MWL734JUH'
+        url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval='+interval+'&symbol=' + symbol + '&apikey=' + key
+        if interval == '1min':
+            var = 'Time Series (1min)'
+        elif interval == '5min':
+            var = 'Time Series (5min)'
+        elif interval == '15min':
+            var = 'Time Series (15min)'
+        elif interval == '30min':
+            var = 'Time Series (30min)'
+        else:
+            var = 'Time Series (60min)'
+        data = requests.get(url).json()[str(var)]
+        transformed = [(v.update({'Time': k}) or v) for (k, v) in data.items()]
+        transformed_list = []
+        for x in transformed:
+            x['open'] = x.pop('1. open')
+            x['high'] = x.pop('2. high')
+            x['low'] = x.pop('3. low')
+            x['close'] = x.pop('4. close')
+            x['volume'] = x.pop('5. volume')
+            transformed_list.append(x)
+
+        context = {
+            'ticker_list': get_ticker_list(),
+            'interval_list': get_interval_list_for_intra_live_data(),
+            'data': transformed_list,
+            'symbol': symbol,
+            'interval': interval
+        }
+        return render(request, "intradaylivedata.html", context)
+    else:
+        context = {
+            'ticker_list': get_ticker_list(),
+            'interval_list': get_interval_list_for_intra_live_data(),
+        }
+        return render(request, "intradaylivedata.html", context)
 
 
 def get_data(request):
@@ -65,7 +112,7 @@ def get_data(request):
             'function': functions
         }
         return render(request,"livedata.html",context)
-    elif request.method == 'POST' and 'Histdata' in request.POST:
+    elif request.method == 'POST' and 'Histdata' in request.POST:  # (TODO) need to remove historical data section
         symbol = str(request.POST.get('get_symbol'))
         start_date = request.POST.get('startdate')
         end_date = request.POST.get('enddate')
@@ -115,7 +162,7 @@ def get_adj_data(request):
             'function': functions
         }
         return render(request,"adjlivedata.html",context)
-    elif request.method == 'POST' and 'Histdata' in request.POST:
+    elif request.method == 'POST' and 'Histdata' in request.POST:        # (TODO) need to remove historical data section
         symbol = str(request.POST.get('get_symbol'))
         start_date = request.POST.get('startdate')
         end_date = request.POST.get('enddate')

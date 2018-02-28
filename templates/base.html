@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--meta name="viewport" content="width=device-width, initial-scale=1.0"-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Stock-Tracer: Get Live and Historical Data</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -31,11 +31,10 @@
                 </div>
 
                 <ul class="list-unstyled components">
-                    <p>Dummy Heading</p>
                     <li class="active">
                         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Stock Time Series Data</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
-                            <li ><a href="#">Intraday live data</a></li>
+                            <li ><a href="{% url 'getintradaylivedata' %}">Intraday live data</a></li>
                             <li><a href="{% url 'getlivedata' %}">Unadjusted Live Data</a></li>
                             <li><a href="{% url 'getadjlivedata' %}">Adjusted Live Data</a></li>
                         </ul>
